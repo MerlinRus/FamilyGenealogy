@@ -48,7 +48,7 @@ def main():
                 tar.add(path,arcname='case/'+path.relative_to(args.case).as_posix())
     digest=hashlib.sha256(package.read_bytes()).hexdigest()
     ssh=['ssh','-i',str(args.identity),'-p',args.port,'-o','IdentitiesOnly=yes','-o','BatchMode=yes',args.host]
-    run(ssh+['mkdir -p /opt/familytree/.incoming'])
+    run(ssh+['install -d -m 700 /opt/familytree/.incoming'])
     print(f'Uploading private release ({package.stat().st_size//1048576} MB)',flush=True)
     remote_archive='/opt/familytree/.incoming/'+package.name
     run(['scp','-i',str(args.identity),'-P',args.port,'-o','IdentitiesOnly=yes','-o','BatchMode=yes',str(package),args.host+':'+remote_archive])

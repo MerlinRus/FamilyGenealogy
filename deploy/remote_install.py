@@ -35,10 +35,11 @@ def main():
     archive = Path(sys.argv[1]).resolve()
     expected_hash = sys.argv[2]
     assert archive.is_relative_to(ROOT / '.incoming')
+    (ROOT/'.incoming').chmod(0o700)
     assert hashlib.sha256(archive.read_bytes()).hexdigest() == expected_hash, 'Upload checksum mismatch'
     release = archive.name.removesuffix('.tar.gz')
     stage = ROOT / '.incoming' / (release + '-unpacked')
-    stage.mkdir(parents=True, exist_ok=False)
+    stage.mkdir(parents=True, mode=0o700, exist_ok=False)
     with tarfile.open(archive, 'r:gz') as tar:
         for member in tar.getmembers():
             target = (stage / member.name).resolve()
@@ -72,6 +73,9 @@ def main():
     releases.mkdir(parents=True,exist_ok=True)
     destination = releases/release
     shutil.copytree(stage/'site',destination)
+    for path in destination.rglob('*'):
+        path.chmod(0o750 if path.is_dir() else 0o640)
+    destination.chmod(0o750)
     current = ROOT/'site'/'current'
     previous = os.readlink(current) if current.is_symlink() else None
     temporary_link = ROOT/'site'/('current-'+release)
