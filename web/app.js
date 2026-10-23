@@ -120,7 +120,7 @@ function renderTree() {
 }
 function transform(){if(scene){scene.style.transform=`translate(${state.x}px,${state.y}px) scale(${state.scale})`;const label=document.querySelector('#zoom-value');if(label)label.textContent=`${Math.round(state.scale*100)}%`;}}
 function zoom(mult,cx=viewport?.clientWidth/2,cy=viewport?.clientHeight/2){const old=state.scale;state.scale=Math.min(1.6,Math.max(.2,old*mult));state.x=cx-(cx-state.x)*state.scale/old;state.y=cy-(cy-state.y)*state.scale/old;transform();}
-function homeView(){if(!viewport)return;state.scale=viewport.clientWidth<600?.55:Math.min(.7,(viewport.clientWidth-70)/1012);state.x=viewport.clientWidth/2-1246*state.scale;state.y=viewport.clientHeight/2-820*state.scale;transform();}
+function homeView(){if(!viewport)return;const mobile=viewport.clientWidth<600;state.scale=mobile?.55:Math.min(.7,(viewport.clientWidth-70)/1012);state.x=viewport.clientWidth/2-1246*state.scale;state.y=viewport.clientHeight/2-(mobile?870:820)*state.scale;transform();}
 function fitView(){const nodes=data.people.filter(p=>visible(p.id)).map(p=>positions[p.id]);const x=Math.min(...nodes.map(p=>p[0])),y=Math.min(...nodes.map(p=>p[1])),w=Math.max(...nodes.map(p=>p[0]))+NODE_W-x,h=Math.max(...nodes.map(p=>p[1]))+NODE_H-y;state.scale=Math.min((viewport.clientWidth-64)/w,(viewport.clientHeight-60)/h,1);state.x=(viewport.clientWidth-w*state.scale)/2-x*state.scale;state.y=(viewport.clientHeight-h*state.scale)/2-y*state.scale;transform();}
 function bindMap(){
   let drag=null;
