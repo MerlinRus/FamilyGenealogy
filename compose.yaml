@@ -1,0 +1,22 @@
+services:
+  web:
+    image: caddy:2-alpine
+    container_name: familytree-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8094:8080"
+    volumes:
+      - ./site:/srv:ro
+      - ./deploy/Caddyfile.internal:/etc/caddy/Caddyfile:ro
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

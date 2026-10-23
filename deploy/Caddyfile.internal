@@ -1,0 +1,12 @@
+{
+    admin off
+    auto_https off
+}
+
+:8080 {
+    root * /srv/current
+    encode zstd gzip
+    @notRead not method GET HEAD
+    respond @notRead "Method not allowed" 405
+    file_server
+}

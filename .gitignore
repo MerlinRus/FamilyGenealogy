@@ -1,0 +1,16 @@
+dist/
+.private/
+private/
+site/
+data/
+.incoming/
+.env
+.env.*
+!.env.example
+*.tar.gz
+*.zip
+node_modules/
+test-results/
+__pycache__/
+*.pyc
+site-access*

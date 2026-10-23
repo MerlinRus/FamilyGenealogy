@@ -1,0 +1,11 @@
+{
+  "name": "family-genealogy",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "python scripts/build.py",
+    "test": "node --test tests/model.test.js",
+    "check": "node --check web/app.js && node --check web/model.js"
+  }
+}
