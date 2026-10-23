@@ -5,6 +5,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 import urllib.error
+import urllib.parse
 import urllib.request
 
 ROOT=Path('/opt/familytree')
@@ -16,7 +17,7 @@ def request(path,credentials=None):
         token=base64.b64encode((credentials['username']+':'+credentials['password']).encode()).decode()
         headers['Authorization']='Basic '+token
     try:
-        with urllib.request.urlopen(urllib.request.Request(BASE+path,headers=headers),timeout=20) as response:
+        with urllib.request.urlopen(urllib.request.Request(BASE+urllib.parse.quote(path,safe='/'),headers=headers),timeout=20) as response:
             return response.status,response.read(),{k.lower():v for k,v in response.headers.items()}
     except urllib.error.HTTPError as error:
         return error.code,error.read(),{k.lower():v for k,v in error.headers.items()}
@@ -35,14 +36,20 @@ def main():
     assert code==200
     assert headers.get('cache-control')=='no-store'
     data=json.loads(body)
-    assert len(data['people'])==26 and len(data['sources'])==24 and len(data['candidate_links'])==6
+    expected=json.loads((ROOT/'private'/'case'/'evidence.json').read_text(encoding='utf-8'))
+    for key in ['people','sources','claims','relationships','candidate_links','conflicts','research_leads']:
+        assert data[key]==expected[key],f'Published {key} differs from uploaded case'
     sample=next(a for a in data['artifacts'] if a['name']=='S020-Yakov-POW-frame4.png')
     code,image,_=request(sample['url'],access)
     assert code==200 and hashlib.sha256(image).hexdigest()==sample['sha256']
     bad=dict(access);bad['password']='deliberately-wrong-verification-password'
     assert request('/data/family.json',bad)[0]==401
     assert 'frame-ancestors' in headers.get('content-security-policy','')
-    result={'tls':'verified with system trust','without_password':checks,'wrong_password':401,'authenticated_html':200,'authenticated_data':200,'source_sha256':'matches','people':26,'sources':24,'candidates':6,'source_files':len(data['artifacts']),'verified_at':datetime.now(timezone.utc).isoformat()}
+    # Check every saved source, including new scans and transcripts, by its build digest.
+    for artifact in data['artifacts']:
+        code,content,_=request(artifact['url'],access)
+        assert code==200 and hashlib.sha256(content).hexdigest()==artifact['sha256'],artifact['name']
+    result={'tls':'verified with system trust','without_password':checks,'wrong_password':401,'authenticated_html':200,'authenticated_data':200,'source_sha256':'all match','people':len(data['people']),'sources':len(data['sources']),'candidates':len(data['candidate_links']),'source_files':len(data['artifacts']),'verified_at':datetime.now(timezone.utc).isoformat()}
     (ROOT/'private'/'verification.json').write_text(json.dumps(result,indent=2))
     deployment=ROOT/'private'/'last-deployment.json'
     if deployment.exists():
