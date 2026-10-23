@@ -38,7 +38,10 @@ def build(case_dir, out):
                               'sha256': hashlib.sha256(src.read_bytes()).hexdigest()})
     data['artifacts'] = artifacts
     data['generated_at'] = datetime.now(timezone.utc).isoformat()
-    data['updated_label'] = '23 октября 2026'
+    latest = datetime.fromisoformat(max(s['date_accessed'] for s in data['sources']))
+    months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+              'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']
+    data['updated_label'] = f'{latest.day} {months[latest.month - 1]} {latest.year}'
     data['owner_id'] = 'P001'
     (out / 'data').mkdir(exist_ok=True)
     (out / 'data' / 'family.json').write_text(json.dumps(data, ensure_ascii=False), encoding='utf-8')
