@@ -11,6 +11,17 @@ ROOT = Path(__file__).resolve().parents[1]
 def build(case_dir, out):
     case_dir, out = case_dir.resolve(), out.resolve()
     data = json.loads((case_dir / 'evidence.json').read_text(encoding='utf-8'))
+    presentation = json.loads((case_dir / 'presentation.json').read_text(encoding='utf-8'))
+    if set(presentation['sources']) != {s['id'] for s in data['sources']}:
+        raise ValueError('Every source needs a plain-language description')
+    if set(presentation['candidates']) != {h['candidate_id'] for h in data['candidate_links']}:
+        raise ValueError('Every candidate needs an explanation')
+    if set(presentation['people']) | set(presentation['candidates']) != {p['id'] for p in data['people']}:
+        raise ValueError('Every person needs a family role or candidate explanation')
+    for source in presentation['sources'].values():
+        if source.get('primary_file') and not (case_dir / 'sources' / source['primary_file']).is_file():
+            raise ValueError('Missing primary preview: '+source['primary_file'])
+    data['presentation'] = presentation
     if len({p['id'] for p in data['people']}) != len(data['people']):
         raise ValueError('Duplicate person ID')
     out.mkdir(parents=True, exist_ok=True)

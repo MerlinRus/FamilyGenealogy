@@ -39,6 +39,8 @@ def main():
     expected=json.loads((ROOT/'private'/'case'/'evidence.json').read_text(encoding='utf-8'))
     for key in ['people','sources','claims','relationships','candidate_links','conflicts','research_leads']:
         assert data[key]==expected[key],f'Published {key} differs from uploaded case'
+    presentation=json.loads((ROOT/'private'/'case'/'presentation.json').read_text(encoding='utf-8'))
+    assert data['presentation']==presentation,'Published descriptions differ from case'
     sample=next(a for a in data['artifacts'] if a['name']=='S020-Yakov-POW-frame4.png')
     code,image,_=request(sample['url'],access)
     assert code==200 and hashlib.sha256(image).hexdigest()==sample['sha256']

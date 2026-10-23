@@ -20,7 +20,7 @@ def main():
     ap.add_argument('--port',default='9022')
     ap.add_argument('--case',type=Path,default=ROOT.parent/'Genealogy')
     args=ap.parse_args()
-    run(['node','--test','tests/model.test.js'],cwd=ROOT)
+    run(['node','--test','tests/model.test.js','tests/presentation.test.js'],cwd=ROOT)
     run(['node','--check','web/app.js'],cwd=ROOT)
     run(['python',str(ROOT/'scripts'/'build.py'),'--case',str(args.case)],cwd=ROOT)
     private=ROOT/'.private';private.mkdir(exist_ok=True)
