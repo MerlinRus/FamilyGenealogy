@@ -25,7 +25,7 @@ def request(path,credentials=None):
 def main():
     access=json.loads((ROOT/'private'/'access.json').read_text())
     checks={}
-    for path in ['/','/data/family.json','/sources/S016-maternal-family-account.txt','/healthz']:
+    for path in ['/','/data/family.json','/sources/S016-maternal-family-account.txt','/healthz','/api/data','/api/history']:
         code,body,headers=request(path)
         assert code==401,(path,code)
         assert headers.get('www-authenticate','').startswith('Basic ')
@@ -37,10 +37,14 @@ def main():
     assert headers.get('cache-control')=='no-store'
     data=json.loads(body)
     expected=json.loads((ROOT/'private'/'case'/'evidence.json').read_text(encoding='utf-8'))
+    import sys
+    sys.path.insert(0,str(ROOT))
+    from server.app import Store
+    merged=Store(ROOT/'site/current/data/family.json',ROOT/'private/editor.sqlite3').read()
     for key in ['people','sources','claims','relationships','candidate_links','conflicts','research_leads']:
-        assert data[key]==expected[key],f'Published {key} differs from uploaded case'
+        assert data[key]==merged[key],f'Published {key} differs from uploaded case'
     presentation=json.loads((ROOT/'private'/'case'/'presentation.json').read_text(encoding='utf-8'))
-    assert data['presentation']==presentation,'Published descriptions differ from case'
+    assert data['presentation']==merged['presentation'],'Published descriptions differ from case'
     sample=next(a for a in data['artifacts'] if a['name']=='S020-Yakov-POW-frame4.png')
     code,image,_=request(sample['url'],access)
     assert code==200 and hashlib.sha256(image).hexdigest()==sample['sha256']

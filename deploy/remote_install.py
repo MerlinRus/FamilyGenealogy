@@ -88,6 +88,23 @@ def main():
     os.chmod(backup,0o600)
     changed = False
     try:
+        import sqlite3
+        database=private/'editor.sqlite3'
+        if database.exists():
+            with sqlite3.connect(database) as src, sqlite3.connect(private/f'editor-before-{release}.sqlite3') as dst: src.backup(dst)
+        shutil.copy2(ROOT/'deploy'/'familytree-api.service','/etc/systemd/system/familytree-api.service')
+        run(['systemctl','daemon-reload'])
+        run(['systemctl','enable','familytree-api'])
+        run(['systemctl','restart','familytree-api'])
+        api_ready=False
+        for _ in range(8):
+            try:
+                api_ready=json.loads(urllib.request.urlopen('http://127.0.0.1:8095/api/health',timeout=3).read())['ok']
+            except OSError:
+                pass
+            if api_ready:break
+            time.sleep(.5)
+        assert api_ready,'Private editor API did not start'
         run(['docker','compose','-p','familytree','up','-d'],cwd=ROOT)
         healthy = False
         for _ in range(8):
@@ -115,7 +132,14 @@ def main():
         Strict-Transport-Security "max-age=31536000"
         -Server
     }}
-    reverse_proxy 127.0.0.1:8094
+    @editor path /api/* /data/family.json
+    handle @editor {{
+        uri replace /data/family.json /api/data
+        reverse_proxy 127.0.0.1:8095
+    }}
+    handle {{
+        reverse_proxy 127.0.0.1:8094
+    }}
 }}
 {MARKER_END}
 '''

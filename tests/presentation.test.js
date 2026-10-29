@@ -23,7 +23,7 @@ const data={
 };
 
 test('семейная запись отличается от сильного кандидата и бокового кандидата',()=>{
-  assert.equal(personContext(data,'P1').label,'Со слов семьи');
+  assert.equal(personContext(data,'P1').label,'Известно семье');
   assert.equal(personContext(data,'P4').category,'candidate');
   assert.equal(candidateType(data,'P4'),'strong');
   assert.equal(candidateType(data,'P2'),'collateral');

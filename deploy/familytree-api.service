@@ -1,0 +1,17 @@
+[Unit]
+Description=Family genealogy private editor
+After=network.target
+
+[Service]
+WorkingDirectory=/opt/familytree
+ExecStart=/usr/bin/python3 /opt/familytree/server/app.py
+Restart=on-failure
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/opt/familytree/private
+
+[Install]
+WantedBy=multi-user.target

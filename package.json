@@ -6,6 +6,6 @@
   "scripts": {
     "build": "python scripts/build.py",
     "test": "node --test tests/*.test.js",
-    "check": "node --check web/app.js && node --check web/model.js"
+    "check": "node --check web/app.js && node --check web/model.js && node --check web/editor.js"
   }
 }

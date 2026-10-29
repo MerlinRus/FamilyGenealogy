@@ -22,6 +22,8 @@ def main():
     args=ap.parse_args()
     run(['node','--test','tests/model.test.js','tests/presentation.test.js'],cwd=ROOT)
     run(['node','--check','web/app.js'],cwd=ROOT)
+    run(['node','--check','web/editor.js'],cwd=ROOT)
+    run(['python','-m','unittest','discover','-s','tests','-p','test_editor.py'],cwd=ROOT)
     run(['python',str(ROOT/'scripts'/'build.py'),'--case',str(args.case)],cwd=ROOT)
     private=ROOT/'.private';private.mkdir(exist_ok=True)
     access_file=private/'access.json'

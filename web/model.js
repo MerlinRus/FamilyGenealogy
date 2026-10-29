@@ -57,6 +57,7 @@ export function matchesSearch(person, query) {
 
 export function sourceIdsForPerson(data, personId) {
   return [...new Set([
+    ...Object.entries(data.presentation?.sources||{}).filter(([,s])=>s.person_ids?.includes(personId)).map(([id])=>id),
     ...data.claims.filter(c => c.person_id === personId).flatMap(c => c.source_ids || []),
     ...data.relationships.filter(r => r.parent_id === personId || r.child_id === personId).flatMap(r => r.source_ids || []),
     ...(data.candidate_links || []).filter(h => h.candidate_id === personId || h.target_id === personId).flatMap(h => h.source_ids || []),
@@ -79,6 +80,7 @@ export function validateData(data) {
 export function candidateType(data, id) {
   const h = data.candidate_links.find(item => item.candidate_id === id);
   if (!h) return 'family';
+  if(data.presentation?.candidates[id]?.decision==='rejected') return 'weak';
   if (h.status === 'strong' || h.status === 'confirmed') return 'strong';
   if (h.relation_type === 'possible_collateral') return 'collateral';
   if (h.status === 'tentative' || data.presentation?.candidates[id]?.label === 'Есть возражения') return 'conflict';
@@ -90,7 +92,7 @@ export function personContext(data, id) {
   const ui = data.presentation?.people[id];
   const recordLabel=data.presentation?.candidates[id]?.record_label;
   return h ? {category:'candidate',label:data.presentation?.candidates[id]?.label || STATUS[h.status],relationship:(h.relation_type === 'possible_collateral' ? 'Проверяем боковое родство' : 'Проверяем совпадение личности')+(recordLabel?' · '+recordLabel:'')}
-    : {category:ui?.category || 'family',label:ui?.family_hypothesis ? 'Семейная версия' : ui?.category === 'mention' ? 'Родство неизвестно' : 'Со слов семьи',relationship:ui?.relationship || 'Семейные сведения'};
+    : {category:ui?.category || 'family',label:ui?.certainty==='unknown'?'Родство уточняем':ui?.certainty==='documented'?'Есть документ':ui?.family_hypothesis||ui?.certainty==='hypothesis' ? 'Семейная версия' : ui?.category === 'mention' ? 'Родство неизвестно' : 'Известно семье',relationship:ui?.relationship || 'Семейные сведения'};
 }
 
 export function sourcePeople(data, sourceId) {
