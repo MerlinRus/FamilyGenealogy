@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {candidateType,personContext,sourcePeople,sourceMatches,artifactsForSource,familyPeople,displayClaims,validatePresentation} from '../web/model.js';
+import {candidateType,personContext,sourcePeople,sourceClaims,sourceMatches,artifactsForSource,familyPeople,displayClaims,validatePresentation} from '../web/model.js';
 
 const data={
   people:[{id:'P1',name:'Ёлкина Анна'},{id:'P2',name:'Ёлкин Василий'},{id:'P3',name:'Алексей'},{id:'P4',name:'Алексей'}],
@@ -55,4 +55,16 @@ test('все общие заметки нескольких источников
   const combined={artifacts:[{name:'S017-S022-maternal-search-notes.md'},{name:'S020-page.png'}]};
   assert.equal(artifactsForSource(combined,'S019').length,1);
   assert.equal(artifactsForSource(combined,'S020').length,2);
+});
+
+test('переход к источнику сохраняет человека и точный факт, не подмешивает родственников',()=>{
+  const scoped=structuredClone(data);
+  scoped.claims.push({id:'C5',person_id:'P3',fact:'birth_place_reported',value:'Другой город',source_ids:['S2']});
+  scoped.claims[0].current=false;
+  assert.deepEqual(sourceClaims(scoped,'S2','P1','C2').map(c=>c.id),['C2']);
+  assert.deepEqual(sourceClaims(scoped,'S2','P1').map(c=>c.id),['C2','C3','C4']);
+  assert.deepEqual(sourceClaims(scoped,'S2','P1','C5').map(c=>c.id),['C2','C3','C4']);
+  assert.deepEqual(sourceClaims(scoped,'S2','P1','C1').map(c=>c.id),['C1']);
+  assert.equal(sourceClaims(scoped,'S2').length,4);
+  assert.deepEqual(sourceClaims(scoped,'S1','P1','C2'),[]);
 });

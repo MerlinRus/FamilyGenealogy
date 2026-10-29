@@ -1,0 +1,73 @@
+/* Person → claim → source: one reading task per page. */
+:root{--ink:#202b43;--muted:#5d6880;--line:#dbe3f0;--blue:#3155a4;font-family:"Segoe UI Variable Text","Segoe UI",system-ui,sans-serif;color:var(--ink);background:#f5f7fb}
+.brand{font-family:inherit;font-size:23px;font-weight:650;letter-spacing:-.6px;color:var(--ink)}.brand>.icon{color:var(--blue)}
+.topbar>a{font-size:16px}.topbar .history-nav{border:0;background:transparent;padding:10px 0;color:var(--blue);text-decoration:underline;text-underline-offset:4px}
+.workspace{max-width:2200px}.nav-item.active{background:#e9eefb;color:var(--blue)}
+.dossier{max-width:1440px;margin:0 auto;color:var(--ink);font-size:18px;line-height:1.6;padding:0 0 24px}
+.dossier :is(h1,h2,h3,p,blockquote){margin:0}.dossier p{max-width:72ch}
+.dossier h1{font-size:40px;line-height:1.2;letter-spacing:-1px;font-weight:650;max-width:26ch;text-wrap:balance}
+.dossier h2{font-size:24px;line-height:1.35;font-weight:650;letter-spacing:-.3px}.dossier h3{font-size:18px;line-height:1.5;font-weight:600;letter-spacing:0}
+.dossier a{color:var(--blue);text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}.dossier a:hover{text-decoration-thickness:2px}
+.dossier .back-link{font-size:17px;margin:0 0 24px;min-height:40px;text-decoration:none}.dossier .back-link:hover{text-decoration:underline}
+.dossier .button{font-size:17px;min-height:48px;padding:11px 18px;border-radius:8px;text-decoration:none;white-space:normal;line-height:1.4;font-weight:600;flex-shrink:0}
+.dossier .button.primary{background:var(--blue);border-color:var(--blue);color:#fff}.dossier .button.primary:hover{background:#244283}
+.dossier .button.secondary{border-color:#b5c3dd;background:#fff;color:var(--blue)}.dossier .button.secondary:hover{background:#edf2fc;border-color:var(--blue)}
+.dossier .inline-action{display:inline-flex;align-items:center;gap:8px;font-size:17px;font-weight:500;min-height:44px;line-height:1.45}
+.profile-header{display:flex;align-items:center;gap:24px;padding:8px 0 32px}
+.profile-avatar{width:88px;height:88px;flex-shrink:0;display:grid;place-items:center;background:#e3eafb;color:var(--blue);border-radius:20px 20px 20px 4px;font-size:30px;letter-spacing:-1px;font-weight:500}
+.profile-identity{flex:1;min-width:0}.dossier .profile-context{display:flex;gap:12px 20px;flex-wrap:wrap;align-items:center;margin-top:14px;font-size:20px;font-weight:500}
+.profile-context>span{font-size:16px;font-weight:400;color:var(--muted);padding-left:20px;border-left:1px solid #b6c2d6}
+.dossier .section-nav{display:flex;gap:8px 28px;flex-wrap:wrap;border-bottom:1px solid #bdcbe0;margin-bottom:32px}
+.dossier .section-nav a{display:flex;align-items:center;gap:10px;min-height:58px;border-bottom:3px solid transparent;margin-bottom:-1px;padding:12px 0;font-size:18px;line-height:1.4;text-decoration:none;color:var(--muted)}
+.dossier .section-nav a[aria-current=page]{border-color:var(--blue);color:var(--blue);font-weight:650}.dossier .section-nav a:hover{color:var(--blue)}
+.section-nav a>span{background:#e7ecf5;border-radius:6px;padding:1px 7px;font-size:15px;color:var(--ink);font-weight:500}
+.dossier-content{background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px 40px}
+.profile-columns{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(340px,1fr);gap:48px}.profile-family{border-left:1px solid var(--line);padding-left:40px}
+.section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
+.dossier .profile-fact{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding:24px 0;border-bottom:1px solid var(--line)}.profile-fact:first-of-type{padding-top:0}.profile-fact>div{min-width:0;flex:1}
+.dossier .profile-fact h3{font-size:17px;font-weight:400;color:var(--muted);margin-bottom:8px}.dossier .fact-value{font-size:26px;line-height:1.4;font-weight:600;color:var(--ink);overflow-wrap:anywhere}
+.profile-fact>.inline-action{margin-top:24px;flex-shrink:0}.dossier .fact-hint{font-size:17px;line-height:1.6;color:var(--muted);margin-top:10px;max-width:45ch}.dossier .fact-origin{font-size:16px;line-height:1.5;color:var(--muted);margin-top:12px}
+.dossier .relative-group>h3{font-size:17px;color:var(--muted);font-weight:400;margin-bottom:8px}.relative-group+.relative-group{margin-top:24px}
+.relative-item{padding:16px 0 20px;border-bottom:1px solid var(--line)}.relative-item:first-of-type{padding-top:8px}
+.dossier .relative-link{display:flex;align-items:flex-start;gap:14px;text-decoration:none;color:var(--ink)}.relative-link>span:last-child{min-width:0;flex:1}
+.relative-link strong{display:block;font-size:20px;line-height:1.4;font-weight:600;max-width:27ch}.relative-link:hover strong{color:var(--blue);text-decoration:underline;text-underline-offset:4px}
+.relative-link>span>span{display:block;margin-top:6px;font-size:17px;color:var(--muted)}.relative-link>span>.relative-open{color:var(--blue);font-size:16px;text-decoration:underline;text-underline-offset:4px}
+.relative-avatar{width:40px;height:40px;display:grid;place-items:center;flex-shrink:0;background:#eef2fa;color:#486393;border-radius:50%;font-size:14px;margin-top:2px}
+.relative-meta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;margin-top:8px;padding-left:54px;font-size:16px;color:var(--muted)}.dossier .relative-meta .inline-action{font-size:16px;min-height:36px}
+.dossier .add-relative{margin-top:24px}.dossier .profile-note{margin-top:32px}.dossier .profile-note h2{font-size:18px;color:var(--muted);font-weight:500;margin-bottom:10px}.dossier .profile-note p{font-size:18px;line-height:1.65}
+.dossier .quiet-copy{font-size:17px;color:var(--muted);margin:12px 0 24px}.dossier .profile-conflicts{padding:20px 24px;background:#fff6e8;border-left:3px solid #a47527;margin-top:24px;border-radius:0 8px 8px 0}.dossier .profile-conflicts h2{font-size:20px;margin-bottom:12px}.dossier .profile-conflicts p+p{margin-top:12px}
+.dossier .version-shortcut{display:block;margin-top:28px;padding:20px;background:#f1f4fc;border-radius:8px;text-decoration:none}.version-shortcut strong,.version-shortcut span{display:block;font-size:17px}.version-shortcut span{margin-top:6px;text-decoration:underline}
+.dossier .record-header{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin:8px 0 32px}.dossier .record-header h1{max-width:30ch;font-size:36px;line-height:1.3}.dossier .record-type{font-size:17px;color:var(--muted);margin-bottom:12px}
+.material-row{display:flex;align-items:center;justify-content:space-between;gap:32px;padding:24px 0;border-bottom:1px solid var(--line)}.material-row:first-child{padding-top:8px}.material-row:last-child{border-bottom:0;padding-bottom:8px}.material-row>div{min-width:0}
+.dossier .material-row h3{font-size:22px;line-height:1.4;margin:12px 0}.dossier .material-row p{font-size:18px;color:var(--muted);max-width:60ch;overflow-wrap:anywhere}.dossier .document-kind{font-size:16px;background:transparent;padding:0;color:var(--muted);font-weight:400}
+.dossier .source-summary-layout,.dossier .source-files-layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:48px}.source-about{border-left:1px solid var(--line);padding-left:32px;align-self:start}
+.dossier .source-about h2{font-size:20px;margin-bottom:16px}.dossier .source-about h3{font-size:17px;margin:24px 0 8px;color:#79531d}.dossier .source-about p{font-size:17px;color:var(--muted);line-height:1.7}.source-about>.button{margin-top:24px}.source-about>.external-action{display:flex;margin-top:16px}
+.dossier .source-context-person{margin:-8px 0 24px;font-size:18px}.citation-entry{padding:24px 0;border-bottom:1px solid var(--line)}.citation-entry:first-of-type{padding-top:0}.citation-entry:last-child{border-bottom:0;padding-bottom:0}
+.dossier .citation-entry h3{font-size:17px;color:var(--muted);font-weight:400;margin-bottom:8px}.dossier .citation-value{font-size:24px;font-weight:600;line-height:1.45}.dossier .citation-person{font-size:18px;margin-bottom:12px}
+.dossier blockquote{border-left:3px solid #9dafd4;padding:8px 0 8px 20px;font-size:20px;line-height:1.7;color:var(--ink);white-space:pre-line;overflow-wrap:anywhere}.citation-entry blockquote{margin:20px 0 12px}
+.fact-dossier{max-width:1100px}.dossier .fact-detail-value{font-size:36px;line-height:1.4;font-weight:600;padding:0 0 24px;overflow-wrap:anywhere}.dossier .fact-detail-note{font-size:18px;color:var(--muted);margin:-8px 0 32px;max-width:65ch}
+.evidence-paper{padding:32px 40px;border:1px solid var(--line);border-radius:16px;background:#fff}.evidence-paper>blockquote{margin:24px 0}.evidence-comment{padding-top:24px;border-top:1px solid var(--line)}
+.dossier .evidence-comment h3{font-size:17px;color:var(--muted);font-weight:500;margin-bottom:8px}.dossier .evidence-comment p{font-size:18px;line-height:1.7}.dossier .evidence-comment p+p{margin-top:12px}.fact-materials{margin-top:40px}
+.file-list article{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 0;border-bottom:1px solid var(--line)}.file-list article>div{min-width:0}.dossier .file-list h3{font-size:20px;margin-bottom:8px}.dossier .file-list p{font-size:16px;color:var(--muted);overflow-wrap:anywhere}
+.source-metadata{margin:0}.source-metadata dt{font-size:16px;color:var(--muted);margin-top:20px}.source-metadata dd{font-size:18px;line-height:1.6;margin:6px 0 0;overflow-wrap:anywhere}.source-metadata+p{margin-top:24px!important}.source-person-list{display:flex;flex-direction:column;gap:12px;font-size:17px}
+.dossier .reading-text{border:0;border-radius:0;padding:0;max-width:850px}.dossier .reading-text h3{font-size:22px;margin:24px 0 16px}.dossier .reading-text>p{font-size:19px;line-height:1.8;margin:16px 0}.dossier .reading-hint{font-size:18px;line-height:1.7;margin-bottom:24px}.dossier .image-reader>p{font-size:17px;margin-top:16px}
+.dossier .page-picker a{color:var(--blue);text-decoration:none}.dossier .page-picker a[aria-current=true]{background:#e9eefb;border-color:var(--blue)}.dossier .page-search{font-size:17px}
+.dossier .private-notes{padding:0 20px;margin-top:28px}.dossier .private-notes[open]{padding-bottom:20px}.dossier .private-notes>summary{font-size:18px!important}.dossier .private-notes p{font-size:17px;margin:12px 0 0}
+.dossier .comparison-section>p{margin:20px 0;font-size:18px}.dossier .comparison-section .next-step{margin-top:24px;font-size:18px}.dossier .candidate-entry{margin-top:24px}
+@media(min-width:1900px){
+ .dossier{font-size:20px}.dossier h1{font-size:48px}.dossier .record-header h1{font-size:40px}.profile-header{padding-bottom:40px}.dossier-content{padding:40px}.profile-columns{gap:56px}.dossier .fact-value{font-size:28px}.relative-link strong{font-size:22px}
+ .dossier :is(.inline-action,.back-link,.button,.quiet-copy,.fact-hint,.profile-fact h3,.source-about p,.source-about h3,.record-type){font-size:18px}.dossier :is(.profile-note p,.material-row p,.evidence-comment p,.reading-text>p){font-size:20px}.dossier :is(.fact-origin,.profile-context>span,.relative-meta,.relative-link>span>.relative-open){font-size:17px}
+}
+@media(max-width:1150px){
+ .profile-columns,.dossier .source-summary-layout,.dossier .source-files-layout{grid-template-columns:1fr;gap:32px}.profile-family,.source-about{border-left:0;border-top:1px solid var(--line);padding:28px 0 0}.profile-header{gap:18px}.profile-avatar{width:64px;height:64px;font-size:23px;border-radius:14px 14px 14px 3px}.dossier h1{font-size:34px}.dossier .record-header h1{font-size:32px}.dossier-content{padding:28px}.material-row{align-items:flex-start}
+}
+@media(max-width:760px){
+ .dossier{font-size:17px;padding-bottom:16px}.dossier .back-link{font-size:16px;margin-bottom:16px}.dossier h1,.dossier .record-header h1{font-size:28px;letter-spacing:-.5px;line-height:1.25;text-wrap:initial}.dossier h2{font-size:22px}.dossier .button{font-size:16px;min-height:46px;padding:10px 14px}.dossier .inline-action{font-size:16px}
+ .profile-header{display:grid;grid-template-columns:48px minmax(0,1fr);gap:16px;padding:4px 0 24px;align-items:start}.profile-avatar{width:48px;height:48px;font-size:18px;border-radius:12px 12px 12px 3px;margin-top:3px}.profile-header>.button{grid-column:2;justify-self:start}.dossier .profile-context{font-size:17px;margin-top:12px;gap:6px 12px}.profile-context>span{border:0;padding:0;font-size:16px}
+ .dossier .section-nav{gap:4px 20px;margin-bottom:24px;flex-wrap:wrap;padding:0 0 2px}.dossier .section-nav a{font-size:17px;min-height:52px;flex-shrink:0}.section-nav a>span{font-size:14px}.dossier-content{border-radius:12px;padding:22px 18px}
+ .section-heading{gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:20px}.section-heading>.inline-action{min-height:32px}.dossier .profile-fact{display:block;padding:24px 0}.dossier .profile-fact:first-of-type{padding-top:0}.profile-fact>.inline-action{margin-top:12px}.dossier .fact-value{font-size:24px}.dossier .fact-hint{font-size:16px}.dossier .fact-origin{font-size:16px;margin-top:8px}
+ .relative-link strong{font-size:20px}.relative-link>span>span{font-size:16px}.relative-meta{padding-left:0;margin-top:12px}.dossier .profile-note p{font-size:17px}.dossier .profile-note{margin-top:24px}
+ .dossier .record-header{display:block;margin:0 0 24px}.record-header>.button{margin-top:20px}.dossier .record-type{font-size:16px;margin-bottom:8px}.dossier .fact-detail-value{font-size:28px}.dossier .fact-detail-note{font-size:17px;margin-bottom:24px}.evidence-paper{padding:24px 20px;border-radius:12px}.dossier blockquote{font-size:19px;padding-left:16px}.dossier .evidence-comment p{font-size:17px}.fact-materials{margin-top:28px}
+ .material-row{display:block;padding:24px 0}.material-row>.button{margin-top:20px}.dossier .material-row h3{font-size:21px}.dossier .material-row p{font-size:17px}.dossier .quiet-copy{font-size:16px}.dossier .citation-value{font-size:23px}.citation-entry blockquote{font-size:18px}.dossier .source-context-person{font-size:17px}.dossier .source-about p{font-size:17px}
+ .file-list article{display:block}.file-list .button{margin-top:16px}.dossier .file-list h3{font-size:19px}.dossier .reading-text>p{font-size:18px}.dossier .reading-text h3{font-size:21px}.dossier .page-picker a{font-size:17px!important}.dossier .private-notes>summary{font-size:17px!important;gap:12px}
+}

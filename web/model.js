@@ -99,6 +99,14 @@ export function sourcePeople(data, sourceId) {
   return data.presentation?.sources[sourceId]?.person_ids || [...new Set(data.claims.filter(c=>c.source_ids.includes(sourceId)).map(c=>c.person_id))];
 }
 
+// A citation opened from a person must keep that person's context.
+export function sourceClaims(data, sourceId, personId='', claimId='') {
+  const claims=data.claims.filter(c=>c.source_ids.includes(sourceId));
+  const exact=claims.find(c=>c.id===claimId && (!personId || c.person_id===personId));
+  if(exact) return [exact];
+  return claims.filter(c=>(!personId || c.person_id===personId) && c.current!==false && !c.superseded_by_source_id);
+}
+
 export function artifactsForSource(data, id) {
   return (data.artifacts || []).filter(a=>a.name.startsWith(id+'-') || a.name.startsWith(id+'_') ||
     (['S010','S011','S012'].includes(id) && a.name==='S010-S012-access-notes.md') ||

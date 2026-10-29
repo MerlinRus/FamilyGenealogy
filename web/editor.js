@@ -15,7 +15,8 @@ function sourceNote(reason,personId){const id=uid('U');return {id,changes:[chang
 export async function renderEditor(view,id,data){
   const main=document.querySelector('#main');dirty=false;
   const person=data.people.find(p=>p.id===id),fact=data.claims.find(c=>c.id===id),source=data.sources.find(s=>s.id===id),relation=data.relationships.find(r=>r.id===id);
-  const target=view==='edit-fact'?fact?.person_id:view==='add-fact'?id:view==='edit-relation'?relation?.child_id:id;
+  const contextPerson=new URLSearchParams(location.hash.split('?')[1]||'').get('person');
+  const target=view==='add-source'&&data.people.some(p=>p.id===contextPerson)?contextPerson:view==='edit-fact'?fact?.person_id:view==='add-fact'?id:view==='edit-relation'?relation?.child_id:id;
   const back=['edit-source'].includes(view)?'#source/'+id:target&&data.people.some(p=>p.id===target)?'#person/'+target:'#people';
   const titles={'edit-person':'Изменить человека','add-person':'Добавить человека','edit-fact':'Изменить сведения','add-fact':'Добавить факт','edit-source':'Изменить описание документа','add-source':'Добавить источник','edit-relation':'Изменить родственную связь','add-relation':'Добавить родственную связь',history:'История изменений'};
   if(!data.editing?.enabled){main.innerHTML='<h1>Редактор недоступен</h1><p>Не удалось подключиться к серверу сохранения. Обновите страницу; исходные сведения доступны для просмотра.</p>';return;}
@@ -26,7 +27,7 @@ export async function renderEditor(view,id,data){
   }
   const pu=data.presentation.people[id],cu=data.presentation.candidates[id],su=data.presentation.sources[id];
   const people=Object.fromEntries(data.people.map(p=>[p.id,p.name]));
-  const facts={birth_date:'Дата рождения',birth_place_reported:'Место рождения',death_date:'Дата смерти',residence_reported:'Место проживания',maiden_name_reported:'Девичья фамилия',military_record:'Служба',personal_note:'Заметка / другие сведения'};
+  const facts={birth_date:'Дата рождения',birth_year:'Год рождения',birth_place_reported:'Место рождения',origin_reported:'Откуда родом',death_date:'Дата смерти',residence_reported:'Место проживания',maiden_name_reported:'Девичья фамилия',military_record:'Служба',personal_note:'Заметка / другие сведения'};
   let fields='';
   if(view==='edit-person'||view==='add-person'){
     fields=input('Фамилия, имя, отчество','name',person?.name)+select('Жив / умер','living',{'':'Не указано',yes:'Жив',no:'Умер'},person?.living===true?'yes':person?.living===false?'no':'')+area('Описание человека','description',cu?.conclusion||pu?.summary||'');
@@ -37,7 +38,7 @@ export async function renderEditor(view,id,data){
     const choices={...facts};if(fact&&!choices[fact.fact])choices[fact.fact]='Текущие сведения';
     fields=select('Что это за сведения','fact',choices,fact?.fact||'personal_note')+(typeof fact?.value==='boolean'?select('Значение','value',{yes:'Да',no:'Нет'},fact.value?'yes':'no'):area('Значение','value',typeof fact?.value==='object'?JSON.stringify(fact.value):fact?.value||'', 'Дату вводите ГГГГ-ММ-ДД или ДД.ММ.ГГГГ; если известен только год — укажите год.'))+select('Моя уверенность','certainty',certainty,fact?.user_certainty||'known')+select('Документ, если он есть','source',{'':'Только мои сведения',...Object.fromEntries(data.sources.map(s=>[s.id,data.presentation.sources[s.id].title]))},'');
   } else if(view==='edit-source'||view==='add-source'){
-    fields=select('Добавить связь источника с человеком','person',{'':'Сохранить текущие связи',...people},'')+input('Понятное название','title',su?.title)+input('Ссылка на запись или документ','url',source?.url,'url')+input('Архив / сайт / держатель','repository',source?.repository)+input('Фонд, опись, дело, лист или номер записи','locator',source?.locator)+area('Что здесь найдено','summary',su?.summary)+area('Ограничения: что этот материал не устанавливает','limit',su?.limit)+select('Тип материала','group',{record:'Документ или запись',family:'Семейные сведения',guide:'Указатель для поиска',research:'Заметки исследования'},su?.group||'record');
+    fields=select('Добавить связь источника с человеком','person',{'':'Сохранить текущие связи',...people},view==='add-source'&&people[contextPerson]?contextPerson:'')+input('Понятное название','title',su?.title)+input('Ссылка на запись или документ','url',source?.url,'url')+input('Архив / сайт / держатель','repository',source?.repository)+input('Фонд, опись, дело, лист или номер записи','locator',source?.locator)+area('Что здесь найдено','summary',su?.summary)+area('Ограничения: что этот материал не устанавливает','limit',su?.limit)+select('Тип материала','group',{record:'Документ или запись',family:'Семейные сведения',guide:'Указатель для поиска',research:'Заметки исследования'},su?.group||'record');
   } else if(view==='edit-relation'||view==='add-relation')fields=select('Родитель','parent',people,relation?.parent_id)+select('Ребёнок','child',people,relation?.child_id||id)+select('Моя уверенность в этой связи','certainty',certainty,relation?.user_certainty||'known');
   else {content.textContent='Запись не найдена';return;}
   if((view==='edit-person'&&!person)||(view==='edit-fact'&&!fact)||(view==='edit-source'&&!source)||(view==='edit-relation'&&!relation)){content.textContent='Запись не найдена';return;}
