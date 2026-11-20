@@ -183,6 +183,6 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, *_): pass
 
 if __name__ == '__main__':
-    server = ThreadingHTTPServer(('127.0.0.1', int(os.environ.get('FAMILY_API_PORT','8095'))), Handler)
+    server = ThreadingHTTPServer((os.environ.get('FAMILY_BIND','127.0.0.1'), int(os.environ.get('FAMILY_API_PORT','8095'))), Handler)
     server.store = Store(os.environ.get('FAMILY_BASE','/opt/familytree/site/current/data/family.json'), os.environ.get('FAMILY_DB','/opt/familytree/private/editor.sqlite3'))
     server.serve_forever()
